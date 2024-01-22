@@ -5,9 +5,10 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab; // The enemy prefab to spawn
-    public float spawnInterval = 2f; // Time interval between spawns
     public int maxEnemies = 10; // Maximum number of enemies to spawn
-    public Transform spawnPoint; // The point where enemies will be spawned
+    public float spawnRadius = 10f; // Maximum distance from spawner (increased spawn radius)
+    public float spawnInterval = 2f;
+    public float spawnHeight = 0.3f;
 
     private float timeSinceLastSpawn;
     private int spawnedEnemiesCount;
@@ -31,11 +32,16 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        // Instantiate a new enemy at the spawn point
-        GameObject newEnemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        // Generate a random position within the specified spawn radius
+        Vector3 randomSpawnPosition = transform.position + Random.onUnitSphere * spawnRadius;
+        randomSpawnPosition.y = spawnHeight;
+
+        // Instantiate a new enemy at the random spawn position
+        Instantiate(enemyPrefab, randomSpawnPosition, Quaternion.identity);
 
         // Increase the count of spawned enemies
         spawnedEnemiesCount++;
     }
+
 
 }

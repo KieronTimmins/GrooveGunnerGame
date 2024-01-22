@@ -16,6 +16,7 @@ public class ToTheBeat : MonoBehaviour
     public GameObject bulletPrefab; // Reference to the bullet prefab
     public Transform firePoint;
     public AudioClip[] musicClips;
+   
 
 
 
