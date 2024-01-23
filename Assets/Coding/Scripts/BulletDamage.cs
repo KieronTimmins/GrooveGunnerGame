@@ -36,14 +36,7 @@ public class BulletDamage : MonoBehaviour
             if (hit.collider.CompareTag("Enemy"))
             {
                 // Get the Enemy script from the hit object
-                //Enemy enemy = hit.collider.GetComponent<Enemy>();
-
-                // Check if the enemy script is not null
-                //if (enemy != null)
-                {
-                    // Deal damage to the enemy
-                    //enemy.TakeDamage(damage);
-                }
+               
             }
         }
     }

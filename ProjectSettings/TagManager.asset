@@ -9,6 +9,7 @@ TagManager:
   - LadderStick
   - Fire
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
