@@ -11,12 +11,14 @@ public class ToTheBeat : MonoBehaviour
 
     private float currentPower;
     private float songStartTime;
-    public float beatsPerMinute = 94f;
+    public float beatsPerMinute = 88f;
     private float secondsPerBeat;
     public GameObject bulletPrefab; // Reference to the bullet prefab
     public Transform firePoint;
     public AudioClip[] musicClips;
-   
+    public AudioClip[] shotSounds; // Array of shot sounds
+    private int currentShotIndex = 0; // Index of the current shot sound
+
 
 
 
@@ -28,6 +30,7 @@ public class ToTheBeat : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
          
         audioSource.playOnAwake = false;
+        audioSource.volume = 0.5f;
         audioSource.Play();
 
         
@@ -50,66 +53,88 @@ public class ToTheBeat : MonoBehaviour
 
     void Update()
     {
-        
-        // Check for input to fire the gun (e.g., Space key)
-        if (Input.GetKeyDown(KeyCode.Space))
+
         {
-            // Check the timing with the music beat (replace this with your music analysis logic)
-            if (IsOnBeat())
+            if (Input.GetMouseButtonDown(0)) // 0 represents the left mouse button
             {
-                IncreasePower();
-                Debug.Log("upgrade");
+                // Check the timing with the music beat (replace this with your music analysis logic)
+                if (IsOnBeat())
+                {
+                    IncreasePower();
+                    Debug.Log("upgrade");
+                }
+
+                // Play the next shot sound from the array
+                PlayNextShotSound();
+
+                // Fire the gun with the current power
+                FireGun();
             }
-
-            // Fire the gun with the current power
-            FireGun();
         }
-    }
 
-    void IncreasePower()
-    {
-        // Increase the power of the gun, but ensure it doesn't exceed the maximum
-        currentPower = Mathf.Min(currentPower + powerIncreaseAmount, maxPower);
-    }
+        void IncreasePower()
+        {
+            // Increase the power of the gun, but ensure it doesn't exceed the maximum
+            currentPower = Mathf.Min(currentPower + powerIncreaseAmount, maxPower);
+        }
 
-    void FireGun()
-    {
-        // Implement your gun firing logic here using the current power
-        Debug.Log("Firing Gun with Power: " + currentPower);
+        void FireGun()
+        {
+            // Implement your gun firing logic here using the current power
+            Debug.Log("Firing Gun with Power: " + currentPower);
 
-        // Reset the power for the next shot
-        currentPower = basePower;
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            // Reset the power for the next shot
+            currentPower = basePower;
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        // Access the bullet's Rigidbody component
-        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+            // Access the bullet's Rigidbody component
+            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
 
-        // Apply a force to the bullet (customize this based on your game)
-        float bulletForce = currentPower; // Use the current power as the force
-        bulletRb.AddForce(firePoint.up * bulletForce, ForceMode.Impulse);
+            // Apply a force to the bullet (customize this based on your game)
+            float bulletForce = currentPower; // Use the current power as the force
+            bulletRb.AddForce(firePoint.up * bulletForce, ForceMode.Impulse);
 
-        // Optional: Play gun firing sound or add visual effects
+            // Optional: Play gun firing sound or add visual effects
 
-        // Reset the power for the next shot
-        currentPower = basePower;
-    }
+            // Reset the power for the next shot
+            currentPower = basePower;
+        }
 
-    bool IsOnBeat()
-    {
+        bool IsOnBeat()
+        {
 
 
-        
-        float songElapsedTime = Time.time - songStartTime;
-        Debug.Log(songElapsedTime);
 
-        // Calculate the current beat index based on the elapsed time
-        int currentBeatIndex = Mathf.FloorToInt(songElapsedTime / secondsPerBeat);
-        Debug.Log(currentBeatIndex);
-        // Calculate the exact time of the current beat
-        float expectedBeatTime = currentBeatIndex * secondsPerBeat;
-        Debug.Log(expectedBeatTime);
+            float songElapsedTime = Time.time - songStartTime;
+            Debug.Log(songElapsedTime);
 
-        // Check if the current time is close enough to the expected beat time
-        return Mathf.Abs(songElapsedTime - expectedBeatTime) < timingThreshold;
+            // Calculate the current beat index based on the elapsed time
+            int currentBeatIndex = Mathf.FloorToInt(songElapsedTime / secondsPerBeat);
+            Debug.Log(currentBeatIndex);
+            // Calculate the exact time of the current beat
+            float expectedBeatTime = currentBeatIndex * secondsPerBeat;
+            Debug.Log(expectedBeatTime);
+
+            // Check if the current time is close enough to the expected beat time
+            return Mathf.Abs(songElapsedTime - expectedBeatTime) < timingThreshold;
+        }
+
+
+        void PlayNextShotSound()
+        {
+            if (shotSounds.Length > 0)
+            {
+                // Play the next shot sound in the array
+                audioSource.PlayOneShot(shotSounds[currentShotIndex]);
+
+                // Update the index for the next shot sound
+                currentShotIndex = (currentShotIndex + 1) % shotSounds.Length;
+            }
+            else
+            {
+                Debug.LogError("No shot sounds assigned to the array.");
+            }
+        }
+
     }
 }
