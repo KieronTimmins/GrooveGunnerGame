@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class PlayerHealth : MonoBehaviour
 
     public Image healthCircle;
     public GameObject splatterImage;
-
+    public TextMeshProUGUI healthText; // Reference to the TextMeshPro element for displaying health
     private RectTransform healthRectTransform;
     private float initialHealthSize;
 
@@ -26,6 +27,7 @@ public class PlayerHealth : MonoBehaviour
         initialHealthSize = healthRectTransform.sizeDelta.x;
 
         UpdateHealthCircle();
+        UpdateHealthText(); // Call this to update the health text initially
     }
 
     void OnTriggerEnter(Collider other)
@@ -41,10 +43,56 @@ public class PlayerHealth : MonoBehaviour
     {
         float newHealthSize = initialHealthSize * (currentHealth / maxHealth);
         healthRectTransform.sizeDelta = new Vector2(newHealthSize, newHealthSize);
+
+        // Change the color of the health circle based on the player's health
+        Color healthColor;
+        if (currentHealth < 25)
+        {
+            healthColor = Color.red;
+        }
+        else if (currentHealth < 45)
+        {
+            healthColor = new Color(1.0f, 0.5f, 0.0f); // Orange
+        }
+        else
+        {
+            healthColor = Color.green;
+        }
+        healthCircle.color = healthColor;
+    }
+
+    void UpdateHealthText()
+    {
+        // Update the TextMeshPro element with the current health value
+        healthText.text = currentHealth.ToString(); // Remove the "Health:" prefix
+
+        // Change the color of the health text based on the player's health
+        Color textColor;
+        if (currentHealth < 25)
+        {
+            textColor = Color.red;
+        }
+        else if (currentHealth < 45)
+        {
+            textColor = new Color(1.0f, 0.5f, 0.0f); // Orange
+        }
+        else
+        {
+            textColor = Color.green;
+        }
+        healthText.color = textColor;
+
+        // Optionally, set the anchored position and size manually
+        healthText.rectTransform.anchoredPosition = new Vector2(0f, 0f); // Adjust as needed
+        healthText.rectTransform.sizeDelta = new Vector2(172, 38); // Adjust as needed
     }
 
     void Update()
     {
+
+        UpdateHealthCircle();
+        UpdateHealthText();
+
         if (currentHealth < maxHealth)
         {
             // Gradually increase health over time
@@ -52,6 +100,8 @@ public class PlayerHealth : MonoBehaviour
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
             UpdateHealthCircle();
+            UpdateHealthText();
+
         }
 
         splatterImage.SetActive(currentHealth <= 30);
