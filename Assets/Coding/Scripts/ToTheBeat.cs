@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ToTheBeat : MonoBehaviour
 {
@@ -23,7 +24,11 @@ public class ToTheBeat : MonoBehaviour
     public float InitialTempo ;
     public int scoreToIncreaseTempo = 1;
 
+    public Text Combo;
+    public Text Score;
     public float tempoIncreaseRate ;
+    public int comboscore;
+    public int score;
     // Index of the current shot sound
 
 
@@ -66,12 +71,15 @@ public class ToTheBeat : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0)) // 0 represents the left mouse button
             {
+                score+= 10;
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
                     IncreasePower();
                     Debug.Log("upgrade");
                     IncreaseTempo();
+                    comboscore +=1;
+                    score+=20;
                 }
 
                 // Play the next shot sound from the array
@@ -80,7 +88,8 @@ public class ToTheBeat : MonoBehaviour
                 // Fire the gun with the current power
                 FireGun();
             }
-          
+
+          ScoreUI();
         }
 
         void IncreasePower()
@@ -158,6 +167,14 @@ public class ToTheBeat : MonoBehaviour
             {
                 Debug.LogError("No shot sounds assigned to the array.");
             }
+        }
+
+        void ScoreUI()
+        {
+            Combo.text = "X" + comboscore;
+            Score.text = "Score: " + score;
+
+
         }
 
     }
