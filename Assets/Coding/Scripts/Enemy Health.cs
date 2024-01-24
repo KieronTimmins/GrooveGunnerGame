@@ -22,6 +22,7 @@ public class EnemyHealth : MonoBehaviour
 
             Debug.Log("hit");
             enemyHealth =-10;
+            Debug.Log(enemyHealth);
 
         }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ToTheBeat : MonoBehaviour
 {
-    public float basePower = 10f; // Base power of the gun
+    public float basePower = 40f; // Base power of the gun
     public float maxPower = 100f; // Maximum power the gun can reach
     public float powerIncreaseAmount = 20f; // Amount of power increased on correct timing
     public float timingThreshold = 0.2f; // Threshold for correct timing (in seconds)
@@ -17,7 +17,14 @@ public class ToTheBeat : MonoBehaviour
     public Transform firePoint;
     public AudioClip[] musicClips;
     public AudioClip[] shotSounds; // Array of shot sounds
-    private int currentShotIndex = 0; // Index of the current shot sound
+    private int currentShotIndex = 0; 
+    
+    private float currentTempo;
+    public float InitialTempo ;
+    public int scoreToIncreaseTempo = 1;
+
+    public float tempoIncreaseRate ;
+    // Index of the current shot sound
 
 
 
@@ -28,11 +35,13 @@ public class ToTheBeat : MonoBehaviour
     {
         currentPower = basePower;
         audioSource = gameObject.AddComponent<AudioSource>();
+        currentTempo = InitialTempo;
          
         audioSource.playOnAwake = false;
         audioSource.volume = 0.5f;
         audioSource.Play();
 
+        audioSource.pitch = currentTempo / 60f;
         
         secondsPerBeat = 60f / beatsPerMinute;
         songStartTime = Time.time;
@@ -62,6 +71,7 @@ public class ToTheBeat : MonoBehaviour
                 {
                     IncreasePower();
                     Debug.Log("upgrade");
+                    IncreaseTempo();
                 }
 
                 // Play the next shot sound from the array
@@ -70,6 +80,7 @@ public class ToTheBeat : MonoBehaviour
                 // Fire the gun with the current power
                 FireGun();
             }
+          
         }
 
         void IncreasePower()
@@ -117,6 +128,19 @@ public class ToTheBeat : MonoBehaviour
 
             // Check if the current time is close enough to the expected beat time
             return Mathf.Abs(songElapsedTime - expectedBeatTime) < timingThreshold;
+        }
+
+
+        void IncreaseTempo()
+        {
+
+            currentTempo += tempoIncreaseRate * Time.deltaTime;
+
+            audioSource.pitch = currentTempo / 60f;
+
+            Debug.Log("working");
+
+
         }
 
 
