@@ -5,15 +5,17 @@ public class DashForward : MonoBehaviour
 {
     public float dashDistance = 5f;
     public float dashDuration = 0.5f;
+    public float dashCooldown = 5f; // New variable for cooldown duration
     public KeyCode dashKey = KeyCode.F;
-    public AudioClip[] dashAudioClips;  // Use an array to store multiple audio clips
+    public AudioClip[] dashAudioClips;
     public AudioSource audioSource;
 
     private bool isDashing;
+    private bool isCooldown;
+    private float cooldownTimer;
 
     void Awake()
     {
-        // Preload the first audio clip.
         if (audioSource != null && dashAudioClips != null && dashAudioClips.Length > 0)
         {
             audioSource.clip = dashAudioClips[0];
@@ -22,25 +24,32 @@ public class DashForward : MonoBehaviour
 
     void Update()
     {
-        // Check for dash input.
-        if (Input.GetKeyDown(dashKey) && !isDashing)
+        if (Input.GetKeyDown(dashKey) && !isDashing && !isCooldown)
         {
-            // Toggle between audio clips.
             ToggleAudioClip();
 
-            // Play dash audio cue immediately.
             if (audioSource != null && audioSource.clip != null)
             {
                 audioSource.Play();
             }
 
             StartCoroutine(Dash());
+            StartCooldown();
+        }
+
+        // Update cooldown timer
+        if (isCooldown)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0)
+            {
+                isCooldown = false;
+            }
         }
     }
 
     void ToggleAudioClip()
     {
-        // Toggle between audio clips.
         if (dashAudioClips != null && dashAudioClips.Length > 1)
         {
             int currentIndex = System.Array.IndexOf(dashAudioClips, audioSource.clip);
@@ -49,30 +58,48 @@ public class DashForward : MonoBehaviour
         }
     }
 
+    void StartCooldown()
+    {
+        isCooldown = true;
+        cooldownTimer = dashCooldown;
+    }
+
     IEnumerator Dash()
     {
-        // Set isDashing to true.
         isDashing = true;
 
-        // Save the current position.
         Vector3 originalPosition = transform.position;
-
-        // Calculate the target position for the dash.
         Vector3 targetPosition = transform.position + transform.forward * dashDistance;
 
-        // Use Lerp to smoothly move towards the target position over dashDuration.
         float elapsedTime = 0f;
         while (elapsedTime < dashDuration)
         {
+            if (CheckForWallCollision())
+            {
+                break;
+            }
+
             transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / dashDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // Ensure the final position is exactly the target position.
         transform.position = targetPosition;
-
-        // Set isDashing to false.
         isDashing = false;
+    }
+
+    bool CheckForWallCollision()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 0.5f))
+        {
+            if (hit.collider.CompareTag("Wall"))
+            {
+                StartCooldown(); // Start cooldown if a wall is hit
+                return true;
+            }
+        }
+
+        return false;
     }
 }
