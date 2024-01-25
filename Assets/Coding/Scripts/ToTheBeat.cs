@@ -14,7 +14,7 @@ public class ToTheBeat : MonoBehaviour
 
     private float currentPower;
     private float songStartTime;
-    public float beatsPerMinute = 88f;
+    public float beatsPerMinute ;
     private float secondsPerBeat;
     public GameObject bulletPrefab; // Reference to the bullet prefab
     public Transform firePoint;
@@ -49,8 +49,8 @@ public class ToTheBeat : MonoBehaviour
     // Index of the current shot sound
     //CameraMovement
     public Camera mainCamera;
-    public float shakeDuration = 0.5f;
-    public float shakeMagnitude = 2.5f;
+    public float shakeDuration = 0.2f;
+    public float shakeMagnitude = 0.2f;
 
     private Vector3 originalCameraPosition;
     public GameObject timeError;
@@ -68,7 +68,7 @@ public class ToTheBeat : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         currentTempo = InitialTempo;
 
-        timeError.SetActive(false);
+        
         comboGainer = 0;
         
 
@@ -112,9 +112,10 @@ public class ToTheBeat : MonoBehaviour
         {
             level1Object.SetActive(false);
             level2Object.SetActive(true);
-            rotationSpeed =+ 10f;
+            rotationSpeed =+ 30f;
             level2Object.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
             ChangeTempo(tempoChangeRate);
+            beatsPerMinute = beatsPerMinute * 1.01f;
 
             // Level change detected, reset percentage to 0
             int intValue = Mathf.RoundToInt(comboGainer);
@@ -125,8 +126,9 @@ public class ToTheBeat : MonoBehaviour
             level1Object.SetActive(false);
             level2Object.SetActive(false);
             level3Object.SetActive(true);
-            rotationSpeed = +30f;
+            rotationSpeed = +60f;
             ChangeTempo(tempoChangeRate);
+            beatsPerMinute = beatsPerMinute * 1.02f;
 
             level3Object.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
             // Level change detected, reset percentage to 0
@@ -304,11 +306,13 @@ public class ToTheBeat : MonoBehaviour
                 if(!IsOnBeat())
                 {
 
+                    timeError.SetActive(true);
 
                     StartScreenShake();
-                    timeError.SetActive(true) ;
                     WaitForSecondsCoroutine();
                     timeError.SetActive(false);
+
+
 
 
                 }
