@@ -42,7 +42,7 @@ public class Noir : MonoBehaviour
     }
     void Update()
     {
-         if (Input.GetKeyDown(KeyCode.Alpha2))
+         if (Input.GetKeyDown(KeyCode.Keypad2))
 
         {
             ToggleBlackandWhite();
