@@ -5,7 +5,7 @@ using TMPro;
 public class PlayerHealth : MonoBehaviour
 {
     public float maxHealth = 100;
-    public float currentHealth = 100;
+    public float currentHealth = 0;
     public float healthRegenerationRate = 5; // Adjust this rate as needed
 
     public Image healthCircle;
