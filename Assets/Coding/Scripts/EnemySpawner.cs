@@ -4,44 +4,58 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab; // The enemy prefab to spawn
+    public GameObject[] enemyGameObjects; // Array of enemy GameObjects to spawn
     public int maxEnemies = 10; // Maximum number of enemies to spawn
-    public float spawnRadius = 10f; // Maximum distance from spawner (increased spawn radius)
-    public float spawnInterval = 2f;
-    public float spawnHeight = 0.3f;
+    public int minEnemies = 8; // Minimum number of enemies to maintain
+    public float spawnRadius = 10f; // Maximum distance from spawner
+    public float spawnInterval = 2f; // Interval between spawns
+    public float spawnHeight = 0.3f; // Spawn height
 
     private float timeSinceLastSpawn;
     private int spawnedEnemiesCount;
 
     void Update()
     {
-        // Check if the maximum number of enemies has been reached
         if (spawnedEnemiesCount < maxEnemies)
         {
-            // Update the timer
             timeSinceLastSpawn += Time.deltaTime;
 
-            // Check if it's time to spawn a new enemy
-            if (timeSinceLastSpawn >= spawnInterval)
+            // Check if it's time to spawn a new enemy or if the number of enemies is below the minimum
+            if (timeSinceLastSpawn >= spawnInterval || spawnedEnemiesCount < minEnemies)
             {
                 SpawnEnemy();
-                timeSinceLastSpawn = 0f; // Reset the timer
+                timeSinceLastSpawn = 0f;
             }
         }
     }
 
     void SpawnEnemy()
     {
-        // Generate a random position within the specified spawn radius
+        if (enemyGameObjects.Length == 0)
+            return;
+
         Vector3 randomSpawnPosition = transform.position + Random.onUnitSphere * spawnRadius;
         randomSpawnPosition.y = spawnHeight;
 
-        // Instantiate a new enemy at the random spawn position
-        Instantiate(enemyPrefab, randomSpawnPosition, Quaternion.identity);
+        GameObject selectedEnemy = enemyGameObjects[Random.Range(0, enemyGameObjects.Length)];
+        GameObject newEnemy = Instantiate(selectedEnemy, randomSpawnPosition, Quaternion.identity);
 
-        // Increase the count of spawned enemies
+        // Assign the spawner as a parent (optional, for organization)
+        newEnemy.transform.parent = transform;
+
+        Monster monsterComponent = newEnemy.GetComponent<Monster>();
+        if (monsterComponent != null)
+        {
+            monsterComponent.spawner = this;
+        }
+
         spawnedEnemiesCount++;
     }
 
-
+    // Public method to be called by an enemy when it is destroyed
+    public void OnEnemyDestroyed()
+    {
+        if (spawnedEnemiesCount > 0)
+            spawnedEnemiesCount--;
+    }
 }

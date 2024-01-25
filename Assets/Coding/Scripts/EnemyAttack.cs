@@ -46,13 +46,4 @@ public class EnemyAttack : MonoBehaviour
         }
 
     }
-    
-
-    
-
-
-
-
-
-
 }

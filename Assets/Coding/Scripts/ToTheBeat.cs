@@ -100,25 +100,27 @@ public class ToTheBeat : MonoBehaviour
 
         void FireGun()
         {
-            // Implement your gun firing logic here using the current power
-            Debug.Log("Firing Gun with Power: " + currentPower);
-
-            // Reset the power for the next shot
-            currentPower = basePower;
+            // Instantiate the bullet at the firePoint position and rotation
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
             // Access the bullet's Rigidbody component
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
 
-            // Apply a force to the bullet (customize this based on your game)
-            float bulletForce = currentPower; // Use the current power as the force
-            bulletRb.AddForce(firePoint.up * bulletForce, ForceMode.Impulse);
+            // Determine the forward direction (assuming firePoint is aligned with the player's view)
+            Vector3 fireDirection = firePoint.forward;
 
-            // Optional: Play gun firing sound or add visual effects
+            // Calculate the force to apply to the bullet
+            float bulletForce = currentPower; // Use the current power as the force
+
+            // Apply force in the forward direction
+            bulletRb.AddForce(fireDirection * bulletForce, ForceMode.Impulse);
 
             // Reset the power for the next shot
             currentPower = basePower;
+
+            // Optional: Play gun firing sound or add visual effects
         }
+
 
         bool IsOnBeat()
         {
