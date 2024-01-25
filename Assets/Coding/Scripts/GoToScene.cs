@@ -13,4 +13,10 @@ public class GoToScene : MonoBehaviour
     {
       SceneManager.LoadScene("MainMenu");
     }
+
+
+    public void GameScene()
+    {
+        SceneManager.LoadScene("GrooveGunner");
+    }
 }
