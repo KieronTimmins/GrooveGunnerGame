@@ -12,6 +12,9 @@ public class PlayerProfile : MonoBehaviour
     public int EnemiesKilled => enemiesKilled;
     public int XPEarned => xpEarned;
 
+    // New property for harmony tokens
+    public int HarmonyTokens => CalculateHarmonyTokens();
+
     public static PlayerProfile Instance
     {
         get
@@ -39,5 +42,11 @@ public class PlayerProfile : MonoBehaviour
     public void AddXP(int amount)
     {
         xpEarned += amount;
+    }
+
+    // Calculate harmony tokens based on the currency
+    private int CalculateHarmonyTokens()
+    {
+        return Mathf.CeilToInt(currency / 10000f);
     }
 }
