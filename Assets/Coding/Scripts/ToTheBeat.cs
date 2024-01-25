@@ -19,6 +19,7 @@ public class ToTheBeat : MonoBehaviour
     public AudioClip[] musicClips;
     public AudioClip[] shotSounds; // Array of shot sounds
     private int currentShotIndex = 0; 
+    private int currentMusicIndex = 0;
     
     private float currentTempo;
     public float InitialTempo ;
@@ -42,23 +43,17 @@ public class ToTheBeat : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         currentTempo = InitialTempo;
          
-        audioSource.playOnAwake = false;
-        audioSource.volume = 0.5f;
-        audioSource.Play();
+        
+        
+        
+        
 
         audioSource.pitch = currentTempo / 60f;
         
         secondsPerBeat = 60f / beatsPerMinute;
         songStartTime = Time.time;
-        if (musicClips.Length > 0)
-        {
-            audioSource.clip = musicClips[Random.Range(0, musicClips.Length)];
-            audioSource.Play(); 
-        }
-        else
-        {
-            Debug.LogError("No music clips assigned to the array.");
-        }
+       
+        
 
 
 
@@ -67,11 +62,12 @@ public class ToTheBeat : MonoBehaviour
 
     void Update()
     {
-
+        
+        
         {
             if (Input.GetMouseButtonDown(0)) // 0 represents the left mouse button
             {
-                score+= 10;
+                score+= 25000;
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
@@ -79,7 +75,7 @@ public class ToTheBeat : MonoBehaviour
                     Debug.Log("upgrade");
                     IncreaseTempo();
                     comboscore +=1;
-                    score+=20;
+                    score+=50000;
                 }
 
                 // Play the next shot sound from the array
@@ -151,6 +147,7 @@ public class ToTheBeat : MonoBehaviour
 
 
         }
+      
 
 
         void PlayNextShotSound()
