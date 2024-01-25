@@ -49,15 +49,15 @@ public class ToTheBeat : MonoBehaviour
     // Index of the current shot sound
     //CameraMovement
     public Camera mainCamera;
-    public float shakeDuration = 0.2f;
-    public float shakeMagnitude = 0.2f;
+    public float shakeDuration = 0.1f;
+    public float shakeMagnitude = 0.1f;
 
     private Vector3 originalCameraPosition;
     public GameObject timeError;
     private float elapsedShakeDuration;
 
 
-
+    public GameObject SuperBoost;
 
 
     private AudioSource audioSource;
@@ -196,6 +196,8 @@ public class ToTheBeat : MonoBehaviour
     }
     void Update()
     {
+        
+        
         if (elapsedShakeDuration > 0)
         {
             // Generate a random offset for the camera position
@@ -223,7 +225,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad1))
 
         {
-            comboscore = 0;
+            
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -234,7 +236,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad2))
 
         {
-            comboscore = 0;
+            
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -245,7 +247,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad3))
 
         {
-            comboscore = 0;
+            
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -256,7 +258,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad4))
 
         {
-            comboscore = 0;
+            
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -267,7 +269,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad5))
 
         {
-            comboscore = 0;
+            
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -278,7 +280,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad6))
 
         {
-            comboscore = 0;
+            
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -291,16 +293,16 @@ public class ToTheBeat : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) // 0 represents the left mouse button
             {
                 
-                score += 25000;
-                comboGainer -= 2;
+                score += 2500;
+                comboGainer += 1;
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
                     IncreasePower();
                     Debug.Log("upgrade");
                     
-                    comboscore +=1;
-                    score+=50000;
+                    comboscore +=5;
+                    score+=5000;
                     comboGainer += 3;
                 }
                 if(!IsOnBeat())
@@ -310,9 +312,20 @@ public class ToTheBeat : MonoBehaviour
 
                     StartScreenShake();
                     WaitForSecondsCoroutine();
-                    timeError.SetActive(false);
+                    
 
 
+
+
+                }
+                if(comboscore > 20)
+                {
+
+                    SuperBoost.SetActive(true);
+                    score += 10000;
+                    WaitForSecondsCoroutine();
+
+                    
 
 
                 }
@@ -370,7 +383,7 @@ public class ToTheBeat : MonoBehaviour
         bool IsOnBeat()
         {
 
-
+            timeError.SetActive(false);
 
             float songElapsedTime = Time.time - songStartTime;
             Debug.Log(songElapsedTime);
