@@ -45,8 +45,17 @@ public class ToTheBeat : MonoBehaviour
     public float currentPercentage;
     public int currentLevel = 1;
     public float rotationSpeed = 20f;
-   
+
     // Index of the current shot sound
+    //CameraMovement
+    public Camera mainCamera;
+    public float shakeDuration = 0.5f;
+    public float shakeMagnitude = 2.5f;
+
+    private Vector3 originalCameraPosition;
+    public GameObject timeError;
+    private float elapsedShakeDuration;
+
 
 
 
@@ -58,8 +67,8 @@ public class ToTheBeat : MonoBehaviour
         currentPower = basePower;
         audioSource = gameObject.AddComponent<AudioSource>();
         currentTempo = InitialTempo;
-         
-        
+
+        timeError.SetActive(false);
         comboGainer = 0;
         
 
@@ -75,13 +84,24 @@ public class ToTheBeat : MonoBehaviour
         // Start playing the first music clip
 
         level1Object.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
+        if (mainCamera == null)
+        {
+            // Assuming the script is attached to the camera, set the camera as the mainCamera
+            mainCamera = Camera.main;
+        }
+
+        originalCameraPosition = mainCamera.transform.position;
 
 
 
 
 
 
-
+    }
+    void StartScreenShake()
+    {
+        // Start the screen shake by setting the elapsed duration
+        elapsedShakeDuration = shakeDuration;
     }
     void CheckPercentageThresholds()
     {
@@ -174,6 +194,25 @@ public class ToTheBeat : MonoBehaviour
     }
     void Update()
     {
+        if (elapsedShakeDuration > 0)
+        {
+            // Generate a random offset for the camera position
+            Vector3 randomOffset = Random.insideUnitSphere * shakeMagnitude;
+
+            // Apply the offset to the camera position
+            mainCamera.transform.position = originalCameraPosition + randomOffset;
+
+            // Decrease the remaining shake duration
+            elapsedShakeDuration -= Time.deltaTime;
+        }
+        else
+        {
+            // Reset the camera position when the shake is complete
+            mainCamera.transform.position = originalCameraPosition;
+        }
+
+
+
         int intValue = Mathf.RoundToInt(comboGainer);
         DecreasePercentage();
         CheckPercentageThresholds();
@@ -182,6 +221,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad1))
 
         {
+            comboscore = 0;
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -192,6 +232,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad2))
 
         {
+            comboscore = 0;
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -202,6 +243,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad3))
 
         {
+            comboscore = 0;
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -212,6 +254,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad4))
 
         {
+            comboscore = 0;
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -222,6 +265,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad5))
 
         {
+            comboscore = 0;
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -232,6 +276,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad6))
 
         {
+            comboscore = 0;
             currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
@@ -243,8 +288,9 @@ public class ToTheBeat : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0)) // 0 represents the left mouse button
             {
-                score+= 25000;
-                comboGainer += 10;
+                
+                score += 25000;
+                comboGainer -= 2;
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
@@ -253,7 +299,18 @@ public class ToTheBeat : MonoBehaviour
                     
                     comboscore +=1;
                     score+=50000;
-                    comboGainer += 20;
+                    comboGainer += 3;
+                }
+                if(!IsOnBeat())
+                {
+
+
+                    StartScreenShake();
+                    timeError.SetActive(true) ;
+                    WaitForSecondsCoroutine();
+                    timeError.SetActive(false);
+
+
                 }
 
                 // Play the next shot sound from the array
@@ -264,6 +321,16 @@ public class ToTheBeat : MonoBehaviour
             }
 
           ScoreUI();
+        }
+        IEnumerator WaitForSecondsCoroutine()
+        {
+            Debug.Log("Coroutine started");
+
+            // Wait for the specified duration
+            yield return new WaitForSeconds(5f);
+
+            // This code will be executed after the wait time
+            Debug.Log("Coroutine finished after " + 5f + " seconds");
         }
 
         void IncreasePower()
