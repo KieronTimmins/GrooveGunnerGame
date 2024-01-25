@@ -32,11 +32,11 @@ public class ToTheBeat : MonoBehaviour
      public TextMeshProUGUI Combo;
     public TextMeshProUGUI Score;
     public TextMeshProUGUI ComboPercent;
-    public float tempoIncreaseRate ;
+    public float tempoIncreaseRate = 0.05f ;
     public int comboscore;
     public int score;
 
-    public float tempoChangeRate = 0.01f;
+    public float tempoChangeRate = 0.05f;
 
     public GameObject level1Object;
     public GameObject level2Object;
@@ -45,6 +45,7 @@ public class ToTheBeat : MonoBehaviour
     public float currentPercentage;
     public int currentLevel = 1;
     public float rotationSpeed = 20f;
+   
     // Index of the current shot sound
 
 
@@ -115,12 +116,14 @@ public class ToTheBeat : MonoBehaviour
     }
     void ResetPercentage()
     {
+        
         // Reset the percentage to 0
         comboGainer = 0f;
 
         // Increase the current level
         currentLevel++;
         int intValue = Mathf.RoundToInt(comboGainer);
+
         Debug.Log("Level Change: Resetting Percentage to 0");
     }
     void PlayMusicClip(int index)
@@ -179,6 +182,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad1))
 
         {
+            currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
             level3Object.SetActive(false);
@@ -188,6 +192,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad2))
 
         {
+            currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
             level3Object.SetActive(false);
@@ -197,6 +202,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad3))
 
         {
+            currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
             level3Object.SetActive(false);
@@ -206,6 +212,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad4))
 
         {
+            currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
             level3Object.SetActive(false);
@@ -215,6 +222,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad5))
 
         {
+            currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
             level3Object.SetActive(false);
@@ -224,6 +232,7 @@ public class ToTheBeat : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad6))
 
         {
+            currentLevel = 0;
             level1Object.SetActive(true);
             level2Object.SetActive(false);
             level3Object.SetActive(false);
