@@ -56,7 +56,9 @@ public class ToTheBeat : MonoBehaviour
     public GameObject timeError;
     private float elapsedShakeDuration;
 
+    public float comboDisplayTime = 0.5f; 
 
+    private float comboTimer;
     public GameObject SuperBoost;
 
 
@@ -64,12 +66,13 @@ public class ToTheBeat : MonoBehaviour
 
     void Start()
     {
+        comboscore = 1;
         currentPower = basePower;
         audioSource = gameObject.AddComponent<AudioSource>();
         currentTempo = InitialTempo;
 
         
-        comboGainer = 0;
+        
         
 
         level1Object.SetActive(true);
@@ -194,10 +197,32 @@ public class ToTheBeat : MonoBehaviour
         // Print or use the current percentage as needed
 
     }
+    void ShowCombo()
+    {
+        // Update the combo text
+        Combo.text = "x" + comboscore;
+
+        // Show the combo text
+        Combo.enabled = true;
+
+        // Set the timer for combo display
+        comboTimer = comboDisplayTime;
+        Debug.Log("working");
+    }
     void Update()
     {
-        
-        
+        if (comboTimer > 0f)
+        {
+            comboTimer -= Time.deltaTime;
+
+
+            // Hide the combo text when the timer expires
+            if (comboTimer <= 0f)
+            {
+                Combo.enabled = false;
+            }
+        }
+
         if (elapsedShakeDuration > 0)
         {
             // Generate a random offset for the camera position
@@ -294,16 +319,17 @@ public class ToTheBeat : MonoBehaviour
             {
                 
                 score += 2500;
-                comboGainer += 1;
+                
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
                     IncreasePower();
                     Debug.Log("upgrade");
-                    
-                    comboscore +=5;
-                    score+=5000;
+                    ShowCombo();
+                    comboscore +=1;
+                    score+=10000;
                     comboGainer += 3;
+                    
                 }
                 if(!IsOnBeat())
                 {
@@ -312,13 +338,13 @@ public class ToTheBeat : MonoBehaviour
 
                     StartScreenShake();
                     WaitForSecondsCoroutine();
-                    
 
+                    SuperBoost.SetActive(false);
 
 
 
                 }
-                if(comboscore > 20)
+                if(comboscore > 30)
                 {
 
                     SuperBoost.SetActive(true);
@@ -424,10 +450,18 @@ public class ToTheBeat : MonoBehaviour
 
         void ScoreUI()
         {
-            Combo.text = "X" + comboscore;
+            
             Score.text = "Score: " + score;
             int intValue = Mathf.RoundToInt(comboGainer);
-            ComboPercent.text = intValue.ToString() + "%"  ;
+
+            
+            ComboPercent.text = intValue.ToString() + "%";
+
+            // Show the combo text
+
+
+            // Set the timer for combo display
+            
 
 
         }
