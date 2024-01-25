@@ -34,7 +34,7 @@ public class ToTheBeat : MonoBehaviour
     public TextMeshProUGUI ComboPercent;
     public float tempoIncreaseRate = 0.05f ;
     public int comboscore;
-    public int score;
+    public float score;
 
     public float tempoChangeRate = 0.05f;
 
@@ -61,19 +61,35 @@ public class ToTheBeat : MonoBehaviour
     private float comboTimer;
     public GameObject SuperBoost;
 
-
+    
     private AudioSource audioSource;
+    public GameObject epicCombo;
+    public GameObject KeepItUp;
+    public GameObject MegaCombo;
+    public GameObject OnFire;
+    public GameObject Legendary;
+
+    public TextMeshProUGUI textMeshProShake;
+    public TextMeshProUGUI textMeshProShake2;
+    public TextMeshProUGUI textMeshProShake3;
+    public TextMeshProUGUI textMeshProShake4;
+    public TextMeshProUGUI textMeshProShake5;
+    private Vector3 originalPosition;
 
     void Start()
     {
-        comboscore = 1;
+    comboscore = 1;
         currentPower = basePower;
         audioSource = gameObject.AddComponent<AudioSource>();
         currentTempo = InitialTempo;
 
-        
-        
-        
+       
+        Legendary.SetActive(false);
+        OnFire.SetActive(false);
+        MegaCombo.SetActive(false);
+        KeepItUp.SetActive(false);
+        epicCombo.SetActive(false);
+
 
         level1Object.SetActive(true);
         level2Object.SetActive(false);
@@ -93,12 +109,37 @@ public class ToTheBeat : MonoBehaviour
             mainCamera = Camera.main;
         }
 
-        originalCameraPosition = mainCamera.transform.position;
+        
 
 
 
 
 
+
+    }
+    IEnumerator ShakeCoroutine()
+    {
+        float elapsedShakeTime = 0f;
+
+        while (elapsedShakeTime < shakeDuration)
+        {
+            // Calculate a random offset for the shake effect
+            Vector3 shakeOffset = Random.insideUnitSphere * shakeMagnitude;
+
+            // Apply the offset to the TextMeshPro object's position
+            textMeshProShake.rectTransform.localPosition = originalPosition + shakeOffset;
+            textMeshProShake2.rectTransform.localPosition = originalPosition + shakeOffset;
+            textMeshProShake3.rectTransform.localPosition = originalPosition + shakeOffset;
+            textMeshProShake4.rectTransform.localPosition = originalPosition + shakeOffset;
+            textMeshProShake5.rectTransform.localPosition = originalPosition + shakeOffset;
+            
+
+            // Increment the elapsed time
+            elapsedShakeTime += Time.deltaTime;
+
+            // Wait for the next frame
+            yield return null;
+        }
 
     }
     void StartScreenShake()
@@ -211,6 +252,7 @@ public class ToTheBeat : MonoBehaviour
     }
     void Update()
     {
+        
         if (comboTimer > 0f)
         {
             comboTimer -= Time.deltaTime;
@@ -317,9 +359,13 @@ public class ToTheBeat : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0)) // 0 represents the left mouse button
             {
-                
-                score += 2500;
-                
+
+
+                Legendary.SetActive(false);
+                OnFire.SetActive(false);
+                MegaCombo.SetActive(false);
+                KeepItUp.SetActive(false);
+                epicCombo.SetActive(false);
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
@@ -327,7 +373,7 @@ public class ToTheBeat : MonoBehaviour
                     Debug.Log("upgrade");
                     ShowCombo();
                     comboscore +=1;
-                    score+=10000;
+                    score+=1000;
                     comboGainer += 3;
                     
                 }
@@ -344,17 +390,65 @@ public class ToTheBeat : MonoBehaviour
 
 
                 }
-                if(comboscore > 30)
+                if(comboscore == 5)
+                {
+                   
+                    SuperBoost.SetActive(true);
+                    score = score * 1.2f;
+                    WaitForSecondsCoroutine();
+                    
+                    epicCombo.SetActive(true);
+                    StartCoroutine(ShakeCoroutine());
+
+                }
+                if (comboscore == 10)
                 {
 
                     SuperBoost.SetActive(true);
-                    score += 10000;
+                    score = score * 1.4f;
+                    WaitForSecondsCoroutine();
+                    
+                    KeepItUp.SetActive(true);
+
+                    StartCoroutine(ShakeCoroutine());
+
+                }
+                if (comboscore == 15)
+                {
+                    score = score * 1.6f;
+                    SuperBoost.SetActive(true);
+                    
                     WaitForSecondsCoroutine();
 
+                   
+                    MegaCombo.SetActive(true);
+                    StartCoroutine(ShakeCoroutine());
+
+                }
+                if (comboscore == 25)
+                {
+
+                    SuperBoost.SetActive(true);
+                    score = score * 1.8f;
+                    WaitForSecondsCoroutine();
                     
+                    OnFire.SetActive(true);
+                    StartCoroutine(ShakeCoroutine());
 
 
                 }
+                if (comboscore == 35)
+                {
+
+                    SuperBoost.SetActive(true);
+                    score = score * 2;
+                    WaitForSecondsCoroutine();
+
+                    Legendary.SetActive(true);
+                    StartCoroutine(ShakeCoroutine());
+
+                }
+
 
                 // Play the next shot sound from the array
                 PlayNextShotSound();
@@ -408,9 +502,11 @@ public class ToTheBeat : MonoBehaviour
 
         bool IsOnBeat()
         {
-
+            
+            
             timeError.SetActive(false);
 
+            
             float songElapsedTime = Time.time - songStartTime;
             Debug.Log(songElapsedTime);
 
@@ -451,17 +547,19 @@ public class ToTheBeat : MonoBehaviour
         void ScoreUI()
         {
             
-            Score.text = "Score: " + score;
+           
             int intValue = Mathf.RoundToInt(comboGainer);
-
             
+
+
             ComboPercent.text = intValue.ToString() + "%";
+            Score.text = "Score: " + score;
 
             // Show the combo text
 
 
             // Set the timer for combo display
-            
+
 
 
         }
