@@ -13,7 +13,7 @@ public class EnemyAttack : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     private bool canAttack = true;
     public GameObject Player;
-    public float normalSpeed = 3f; // Set your initial speed here
+    public float normalSpeed = 30f; // Set your initial speed here
     public float fasterSpeed = 100f;
 
     void Start()
@@ -39,7 +39,7 @@ public class EnemyAttack : MonoBehaviour
 
             // Check if the player is within attack range
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.D))
         {
             Debug.Log("speed");
             navMeshAgent.speed = 200;
