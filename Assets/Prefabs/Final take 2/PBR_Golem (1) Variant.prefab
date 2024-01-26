@@ -80,6 +80,14 @@ PrefabInstance:
       propertyPath: m_BaseOffset
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8615649566360736040, guid: e9cb08a695355164a9b37ecc00a08f0b, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 86d4ae5531b1def4387dad48a9f50969, type: 3}
+    - target: {fileID: 8615649566360736040, guid: e9cb08a695355164a9b37ecc00a08f0b, type: 3}
+      propertyPath: bloodEffectPrefab
+      value: 
+      objectReference: {fileID: 4404302993772387180, guid: a109178b22fe60e4bb9547fab19aa9e8, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
