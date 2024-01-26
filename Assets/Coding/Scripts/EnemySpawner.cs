@@ -17,11 +17,24 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (spawnedEnemiesCount < maxEnemies)
+        // Check if the number of enemies is below the minimum threshold
+        if (spawnedEnemiesCount < minEnemies)
         {
             timeSinceLastSpawn += Time.deltaTime;
 
-            if (timeSinceLastSpawn >= spawnInterval || spawnedEnemiesCount < minEnemies)
+            // Spawn an enemy if the spawn interval has passed
+            if (timeSinceLastSpawn >= spawnInterval)
+            {
+                SpawnEnemy();
+                timeSinceLastSpawn = 0f;
+            }
+        }
+        else if (spawnedEnemiesCount < maxEnemies)
+        {
+            timeSinceLastSpawn += Time.deltaTime;
+
+            // Spawn an enemy if the spawn interval has passed
+            if (timeSinceLastSpawn >= spawnInterval)
             {
                 SpawnEnemy();
                 timeSinceLastSpawn = 0f;
@@ -46,6 +59,12 @@ public class EnemySpawner : MonoBehaviour
         if (enemyScript != null)
         {
             enemyScript.playerTransform = playerTransform;
+        }
+
+        Monster monsterScript = newEnemy.GetComponent<Monster>();
+        if (monsterScript != null)
+        {
+            monsterScript.spawner = this;
         }
 
         spawnedEnemiesCount++;
