@@ -1,4 +1,4 @@
-using System.Collections;
+  using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -82,6 +82,8 @@ public class ToTheBeat : MonoBehaviour
     public AudioClip OnFireAudio;
     public AudioClip LegendaryAudio;
 
+    public float deactivateDelay = 0.5f;
+
     public Transform cameraTransform;
 
     void Start()
@@ -124,6 +126,28 @@ public class ToTheBeat : MonoBehaviour
 
 
     }
+    IEnumerator DeactivateEffect()
+    {
+
+        yield return new WaitForSeconds(deactivateDelay);
+        timeError.SetActive(false);
+
+        
+
+
+    }
+    IEnumerator DeactivateEffectCombo()
+    {
+
+        yield return new WaitForSeconds(deactivateDelay);
+        SuperBoost.SetActive(false);
+
+        
+
+
+    }
+
+
     IEnumerator ShakeCoroutine()
     {
         float elapsedShakeTime = 0f;
@@ -374,7 +398,7 @@ public class ToTheBeat : MonoBehaviour
                     timeError.SetActive(true);
 
                     
-                    WaitForSecondsCoroutine();
+                    StartCoroutine(DeactivateEffect());
 
                     SuperBoost.SetActive(false);
                     comboscore = 1;
@@ -386,7 +410,7 @@ public class ToTheBeat : MonoBehaviour
                     audioSource.PlayOneShot(epicComboAudio);
                     SuperBoost.SetActive(true);
                     score = score * 1.2f;
-                    WaitForSecondsCoroutine();
+                    StartCoroutine(DeactivateEffectCombo());
                     
                     epicCombo.SetActive(true);
                     StartCoroutine(ShakeCoroutine());
@@ -397,8 +421,9 @@ public class ToTheBeat : MonoBehaviour
                     audioSource.pitch = 1.0f;
                     audioSource.PlayOneShot(KeepItUpAudio);
                     SuperBoost.SetActive(true);
+                    StartCoroutine(DeactivateEffectCombo());
                     score = score * 1.4f;
-                    WaitForSecondsCoroutine();
+                    
                     
                     KeepItUp.SetActive(true);
 
@@ -411,8 +436,8 @@ public class ToTheBeat : MonoBehaviour
                     audioSource.PlayOneShot(MegaComboAudio);
                     score = score * 1.6f;
                     SuperBoost.SetActive(true);
+                    StartCoroutine(DeactivateEffectCombo());
                     
-                    WaitForSecondsCoroutine();
 
                    
                     MegaCombo.SetActive(true);
@@ -424,7 +449,7 @@ public class ToTheBeat : MonoBehaviour
                     audioSource.PlayOneShot(OnFireAudio);
                     SuperBoost.SetActive(true);
                     score = score * 1.8f;
-                    WaitForSecondsCoroutine();
+                    StartCoroutine(DeactivateEffectCombo());
                     
                     OnFire.SetActive(true);
                     StartCoroutine(ShakeCoroutine());
@@ -436,7 +461,7 @@ public class ToTheBeat : MonoBehaviour
                     audioSource.PlayOneShot(LegendaryAudio);
                     SuperBoost.SetActive(true);
                     score = score * 2;
-                    
+                    StartCoroutine(DeactivateEffectCombo());
 
                     Legendary.SetActive(true);
                     StartCoroutine(ShakeCoroutine());
