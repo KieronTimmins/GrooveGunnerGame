@@ -407,7 +407,7 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if(comboscore == 6)
                 {
-                    audioSource.PlayOneShot(epicComboAudio);
+                    audioSource.PlayOneShot(epicComboAudio, 6.5f);
                     SuperBoost.SetActive(true);
                     score = score * 1.2f;
                     StartCoroutine(DeactivateEffectCombo());
@@ -419,7 +419,7 @@ public class ToTheBeat : MonoBehaviour
                 if (comboscore == 10)
                 {
                     audioSource.pitch = 1.0f;
-                    audioSource.PlayOneShot(KeepItUpAudio);
+                    audioSource.PlayOneShot(KeepItUpAudio, 6.5f);
                     SuperBoost.SetActive(true);
                     StartCoroutine(DeactivateEffectCombo());
                     score = score * 1.4f;
@@ -433,7 +433,7 @@ public class ToTheBeat : MonoBehaviour
                 if (comboscore == 16)
                 {
 
-                    audioSource.PlayOneShot(MegaComboAudio);
+                    audioSource.PlayOneShot(MegaComboAudio, 6.5f);
                     score = score * 1.6f;
                     SuperBoost.SetActive(true);
                     StartCoroutine(DeactivateEffectCombo());
@@ -446,7 +446,7 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if (comboscore == 26)
                 {
-                    audioSource.PlayOneShot(OnFireAudio);
+                    audioSource.PlayOneShot(OnFireAudio, 6.5f);
                     SuperBoost.SetActive(true);
                     score = score * 1.8f;
                     StartCoroutine(DeactivateEffectCombo());
@@ -458,7 +458,7 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if (comboscore == 36)
                 {
-                    audioSource.PlayOneShot(LegendaryAudio);
+                    audioSource.PlayOneShot(LegendaryAudio, 6.5f);
                     SuperBoost.SetActive(true);
                     score = score * 2;
                     StartCoroutine(DeactivateEffectCombo());
@@ -478,16 +478,7 @@ public class ToTheBeat : MonoBehaviour
 
           ScoreUI();
         }
-        IEnumerator WaitForSecondsCoroutine()
-        {
-            Debug.Log("Coroutine started");
-
-            // Wait for the specified duration
-            yield return new WaitForSeconds(5f);
-
-            // This code will be executed after the wait time
-            Debug.Log("Coroutine finished after " + 5f + " seconds");
-        }
+      
 
         void IncreasePower()
         {

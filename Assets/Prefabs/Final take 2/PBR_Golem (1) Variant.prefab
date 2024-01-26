@@ -81,6 +81,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8615649566360736040, guid: e9cb08a695355164a9b37ecc00a08f0b, type: 3}
+      propertyPath: health
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615649566360736040, guid: e9cb08a695355164a9b37ecc00a08f0b, type: 3}
       propertyPath: deathSound
       value: 
       objectReference: {fileID: 8300000, guid: 86d4ae5531b1def4387dad48a9f50969, type: 3}
