@@ -14,6 +14,9 @@ public class DashForward : MonoBehaviour
     private bool isCooldown;
     private float cooldownTimer;
 
+    public float Delay = 0.3f;
+ 
+
     void Awake()
     {
         if (audioSource != null && dashAudioClips != null && dashAudioClips.Length > 0)
@@ -21,12 +24,13 @@ public class DashForward : MonoBehaviour
             audioSource.clip = dashAudioClips[0];
         }
     }
-
+  
     void Update()
     {
         if (Input.GetKeyDown(dashKey) && !isDashing && !isCooldown)
         {
             ToggleAudioClip();
+            
 
             if (audioSource != null && audioSource.clip != null)
             {

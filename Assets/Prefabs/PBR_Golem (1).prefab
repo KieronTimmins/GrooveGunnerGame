@@ -535,14 +535,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bde297e81b17d0c46b18fdb8b14b8c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  attackCooldown: 0
-  targetObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  normalSpeed: 3
-  fasterSpeed: 100
+  playerTransform: {fileID: 0}
+  chaseSpeed: 3
+  attackRange: 2
+  damagePerSecond: 5
+  rotationSpeed: 5
 --- !u!114 &5645470084143547018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,6 +554,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   spawner: {fileID: 0}
+  deathSound: {fileID: 0}
+  bloodEffectPrefab: {fileID: 0}
 --- !u!1 &3543415643842794825
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-  using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -81,6 +81,8 @@ public class ToTheBeat : MonoBehaviour
     public AudioClip MegaComboAudio;
     public AudioClip OnFireAudio;
     public AudioClip LegendaryAudio;
+
+    private AudioSource audioSource2;
 
     public float deactivateDelay = 0.5f;
 
@@ -280,7 +282,7 @@ public class ToTheBeat : MonoBehaviour
     }
     void Update()
     {
-        
+        audioSource2.pitch = 1.0f;
         if (comboTimer > 0f)
         {
             comboTimer -= Time.deltaTime;
@@ -389,7 +391,7 @@ public class ToTheBeat : MonoBehaviour
                     ShowCombo();
                     comboscore +=1;
                     score+=1000;
-                    comboGainer += 10;
+                    comboGainer += 5;
                     
                 }
                 if(!IsOnBeat())
@@ -407,7 +409,7 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if(comboscore == 6)
                 {
-                    audioSource.PlayOneShot(epicComboAudio, 6.5f);
+                    audioSource2.PlayOneShot(epicComboAudio, 4.5f);
                     SuperBoost.SetActive(true);
                     score = score * 1.2f;
                     StartCoroutine(DeactivateEffectCombo());
@@ -419,7 +421,7 @@ public class ToTheBeat : MonoBehaviour
                 if (comboscore == 10)
                 {
                     audioSource.pitch = 1.0f;
-                    audioSource.PlayOneShot(KeepItUpAudio, 6.5f);
+                    audioSource2.PlayOneShot(KeepItUpAudio, 4.5f);
                     SuperBoost.SetActive(true);
                     StartCoroutine(DeactivateEffectCombo());
                     score = score * 1.4f;
@@ -433,7 +435,7 @@ public class ToTheBeat : MonoBehaviour
                 if (comboscore == 16)
                 {
 
-                    audioSource.PlayOneShot(MegaComboAudio, 6.5f);
+                    audioSource2.PlayOneShot(MegaComboAudio, 4.5f);
                     score = score * 1.6f;
                     SuperBoost.SetActive(true);
                     StartCoroutine(DeactivateEffectCombo());
@@ -446,7 +448,7 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if (comboscore == 26)
                 {
-                    audioSource.PlayOneShot(OnFireAudio, 6.5f);
+                    audioSource2.PlayOneShot(OnFireAudio, 4.5f);
                     SuperBoost.SetActive(true);
                     score = score * 1.8f;
                     StartCoroutine(DeactivateEffectCombo());
@@ -458,7 +460,7 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if (comboscore == 36)
                 {
-                    audioSource.PlayOneShot(LegendaryAudio, 6.5f);
+                    audioSource2.PlayOneShot(LegendaryAudio, 4.5f);
                     SuperBoost.SetActive(true);
                     score = score * 2;
                     StartCoroutine(DeactivateEffectCombo());
