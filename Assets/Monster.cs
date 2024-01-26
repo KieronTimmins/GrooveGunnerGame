@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Monster : MonoBehaviour
 {
@@ -52,6 +53,8 @@ public class Monster : MonoBehaviour
         {
             Instantiate(bloodEffectPrefab, transform.position, Quaternion.identity);
         }
+
+        PlayerProfile.Instance.IncreaseEnemiesKilled();
 
         // Code for monster death, like playing an animation
         Destroy(gameObject); // Destroy the monster object

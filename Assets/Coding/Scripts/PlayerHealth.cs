@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class PlayerHealth : MonoBehaviour
@@ -105,5 +106,17 @@ public class PlayerHealth : MonoBehaviour
         }
 
         splatterImage.SetActive(currentHealth <= 30);
+
+        if (currentHealth <= 0)
+        {
+            HandlePlayerDeath();
+        }
+
+    }
+
+    private void HandlePlayerDeath()
+    {
+        // Load the end game scene
+        SceneManager.LoadScene("end game");
     }
 }
