@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerProfile : MonoBehaviour
 {
     private static PlayerProfile _instance;
 
     private int currency = 150; // Initialize currency to 150
-    private int enemiesKilled;
+    public int enemiesKilled;
     private int xpEarned;
 
     public int Currency => currency;

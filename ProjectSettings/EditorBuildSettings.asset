@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameScenes/GrooveGunner.unity
     guid: 68e5b28d6ed403747a6fd60b4e05f6cf
+  - enabled: 1
+    path: Assets/GameScenes/end game.unity
+    guid: 97bcffa01436d1240be204c9a603ea3a
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 39b82904ac8545641a36b00b7fb15bcd, type: 2}
