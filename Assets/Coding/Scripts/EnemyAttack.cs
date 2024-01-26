@@ -39,7 +39,7 @@ public class EnemyAttack : MonoBehaviour
 
             // Check if the player is within attack range
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
-        if (Input.GetKeyDown(KeyCode.D))
+        
         {
             Debug.Log("speed");
             navMeshAgent.speed = 200;

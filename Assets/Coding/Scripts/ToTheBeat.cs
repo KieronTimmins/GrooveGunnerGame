@@ -49,8 +49,8 @@ public class ToTheBeat : MonoBehaviour
     // Index of the current shot sound
     //CameraMovement
     public Camera mainCamera;
-    public float shakeDuration = 0.1f;
-    public float shakeMagnitude = 0.1f;
+    public float shakeDuration = 0.8f;
+    public float shakeMagnitude = 0.8f;
 
     private Vector3 originalCameraPosition;
     public GameObject timeError;
@@ -76,9 +76,17 @@ public class ToTheBeat : MonoBehaviour
     public TextMeshProUGUI textMeshProShake5;
     private Vector3 originalPosition;
 
+    public AudioClip epicComboAudio;
+    public AudioClip KeepItUpAudio;
+    public AudioClip MegaComboAudio;
+    public AudioClip OnFireAudio;
+    public AudioClip LegendaryAudio;
+
+    public Transform cameraTransform;
+
     void Start()
     {
-    comboscore = 1;
+        comboscore = 1;
         currentPower = basePower;
         audioSource = gameObject.AddComponent<AudioSource>();
         currentTempo = InitialTempo;
@@ -103,11 +111,10 @@ public class ToTheBeat : MonoBehaviour
         // Start playing the first music clip
 
         level1Object.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
-        if (mainCamera == null)
-        {
+        
             // Assuming the script is attached to the camera, set the camera as the mainCamera
-            mainCamera = Camera.main;
-        }
+            originalCameraPosition = cameraTransform.localPosition;
+        
 
         
 
@@ -142,11 +149,8 @@ public class ToTheBeat : MonoBehaviour
         }
 
     }
-    void StartScreenShake()
-    {
-        // Start the screen shake by setting the elapsed duration
-        elapsedShakeDuration = shakeDuration;
-    }
+    
+   
     void CheckPercentageThresholds()
     {
        
@@ -265,24 +269,10 @@ public class ToTheBeat : MonoBehaviour
             }
         }
 
-        if (elapsedShakeDuration > 0)
-        {
-            // Generate a random offset for the camera position
-            Vector3 randomOffset = Random.insideUnitSphere * shakeMagnitude;
-
-            // Apply the offset to the camera position
-            mainCamera.transform.position = originalCameraPosition + randomOffset;
-
-            // Decrease the remaining shake duration
-            elapsedShakeDuration -= Time.deltaTime;
-        }
-        else
-        {
-            // Reset the camera position when the shake is complete
-            mainCamera.transform.position = originalCameraPosition;
-        }
+        
 
 
+       
 
         int intValue = Mathf.RoundToInt(comboGainer);
         DecreasePercentage();
@@ -366,6 +356,7 @@ public class ToTheBeat : MonoBehaviour
                 MegaCombo.SetActive(false);
                 KeepItUp.SetActive(false);
                 epicCombo.SetActive(false);
+                comboGainer += 1;
                 // Check the timing with the music beat (replace this with your music analysis logic)
                 if (IsOnBeat())
                 {
@@ -374,7 +365,7 @@ public class ToTheBeat : MonoBehaviour
                     ShowCombo();
                     comboscore +=1;
                     score+=1000;
-                    comboGainer += 3;
+                    comboGainer += 10;
                     
                 }
                 if(!IsOnBeat())
@@ -382,17 +373,17 @@ public class ToTheBeat : MonoBehaviour
 
                     timeError.SetActive(true);
 
-                    StartScreenShake();
+                    
                     WaitForSecondsCoroutine();
 
                     SuperBoost.SetActive(false);
-
+                    comboscore = 1;
 
 
                 }
-                if(comboscore == 5)
+                if(comboscore == 6)
                 {
-                   
+                    audioSource.PlayOneShot(epicComboAudio);
                     SuperBoost.SetActive(true);
                     score = score * 1.2f;
                     WaitForSecondsCoroutine();
@@ -403,7 +394,8 @@ public class ToTheBeat : MonoBehaviour
                 }
                 if (comboscore == 10)
                 {
-
+                    audioSource.pitch = 1.0f;
+                    audioSource.PlayOneShot(KeepItUpAudio);
                     SuperBoost.SetActive(true);
                     score = score * 1.4f;
                     WaitForSecondsCoroutine();
@@ -413,8 +405,10 @@ public class ToTheBeat : MonoBehaviour
                     StartCoroutine(ShakeCoroutine());
 
                 }
-                if (comboscore == 15)
+                if (comboscore == 16)
                 {
+
+                    audioSource.PlayOneShot(MegaComboAudio);
                     score = score * 1.6f;
                     SuperBoost.SetActive(true);
                     
@@ -425,9 +419,9 @@ public class ToTheBeat : MonoBehaviour
                     StartCoroutine(ShakeCoroutine());
 
                 }
-                if (comboscore == 25)
+                if (comboscore == 26)
                 {
-
+                    audioSource.PlayOneShot(OnFireAudio);
                     SuperBoost.SetActive(true);
                     score = score * 1.8f;
                     WaitForSecondsCoroutine();
@@ -437,12 +431,12 @@ public class ToTheBeat : MonoBehaviour
 
 
                 }
-                if (comboscore == 35)
+                if (comboscore == 36)
                 {
-
+                    audioSource.PlayOneShot(LegendaryAudio);
                     SuperBoost.SetActive(true);
                     score = score * 2;
-                    WaitForSecondsCoroutine();
+                    
 
                     Legendary.SetActive(true);
                     StartCoroutine(ShakeCoroutine());
