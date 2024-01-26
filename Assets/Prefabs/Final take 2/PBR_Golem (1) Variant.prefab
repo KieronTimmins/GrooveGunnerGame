@@ -87,7 +87,7 @@ PrefabInstance:
     - target: {fileID: 8615649566360736040, guid: e9cb08a695355164a9b37ecc00a08f0b, type: 3}
       propertyPath: bloodEffectPrefab
       value: 
-      objectReference: {fileID: 4404302993772387180, guid: a109178b22fe60e4bb9547fab19aa9e8, type: 3}
+      objectReference: {fileID: 6730806534957639559, guid: e0f830404ccd94d4ea2f12e6087f1a70, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
