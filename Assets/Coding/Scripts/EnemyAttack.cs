@@ -1,49 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyFollowAndAttack : MonoBehaviour
 {
-    public int damage = 10; // Damage inflicted by the enemy per attack
-    public float attackCooldown = 1.5f; // Cooldown between attacks
-    public Transform target; // Reference to the player's transform
+    public Transform playerTransform; // Assign this to the player's transform in the inspector
+    public float chaseSpeed = 3.0f;
+    public float attackRange = 2.0f; // Range within which the enemy can attack
+    public float damagePerSecond = 10.0f; // Damage dealt to the player per second
+    public float rotationSpeed = 5.0f; // Speed of rotation towards the player
 
-    private NavMeshAgent navMeshAgent;
-    private bool canAttack = true;
-    public GameObject Player;
-    public float normalSpeed = 30f; // Set your initial speed here
-    public float fasterSpeed = 100f;
-
-    void Start()
-    {
-        // Get the NavMeshAgent component
-        navMeshAgent = GetComponent<NavMeshAgent>();
-
-        navMeshAgent.speed = 10;
-
-        // If player is not assigned, try to find it in the scene
-
-
-
-
-    }
+    private float lastAttackTime;
 
     void Update()
     {
-        
-        
-            // Set the destination to the player's position
-            navMeshAgent.SetDestination(target.position);
-
-            // Check if the player is within attack range
-            float distanceToPlayer = Vector3.Distance(transform.position, target.position);
-        
+        if (playerTransform == null)
         {
-            Debug.Log("speed");
-            navMeshAgent.speed = 200;
+            Debug.LogError("Player Transform not set on " + gameObject.name);
+            return;
         }
 
+        // Calculate the distance to the player
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distanceToPlayer <= attackRange)
+        {
+            // If within attack range, deal damage over time
+            if (Time.time - lastAttackTime >= 1f) // 1 second between attacks
+            {
+                playerTransform.GetComponent<PlayerHealth>().currentHealth -= damagePerSecond;
+                lastAttackTime = Time.time;
+            }
+        }
+        else
+        {
+            // Move towards the player
+            Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+            transform.position += directionToPlayer * chaseSpeed * Time.deltaTime;
+
+            // Rotate towards the player
+            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 }
+

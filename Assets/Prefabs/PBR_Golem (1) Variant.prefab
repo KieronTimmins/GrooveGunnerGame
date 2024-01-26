@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4408297863206454, guid: 6bbfea6690ef7724ba495c866081f855, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4408297863206454, guid: 6bbfea6690ef7724ba495c866081f855, type: 3}
       propertyPath: m_LocalScale.x
@@ -185,8 +185,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   attackCooldown: 1.5
-  target: {fileID: 5138032867030446890, guid: 6ea200fba87024042be400d02e43c4cb, type: 3}
-  Player: {fileID: 5135592522283755650, guid: 6ea200fba87024042be400d02e43c4cb, type: 3}
+  target: {fileID: 8188576598708797491, guid: c6de0af3028226e4598b0786c9ddbedd, type: 3}
+  Player: {fileID: 7560642842123445143, guid: c6de0af3028226e4598b0786c9ddbedd, type: 3}
   normalSpeed: 3
   fasterSpeed: 100
 --- !u!114 &8615649566360736040
@@ -202,3 +202,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  spawner: {fileID: 0}

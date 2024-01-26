@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject[] enemyGameObjects; // Array of enemy GameObjects to spawn
+    public Transform playerTransform; // Reference to the player's transform
     public int maxEnemies = 10; // Maximum number of enemies to spawn
     public int minEnemies = 8; // Minimum number of enemies to maintain
     public float spawnRadius = 10f; // Maximum distance from spawner
@@ -20,7 +21,6 @@ public class EnemySpawner : MonoBehaviour
         {
             timeSinceLastSpawn += Time.deltaTime;
 
-            // Check if it's time to spawn a new enemy or if the number of enemies is below the minimum
             if (timeSinceLastSpawn >= spawnInterval || spawnedEnemiesCount < minEnemies)
             {
                 SpawnEnemy();
@@ -31,7 +31,7 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        if (enemyGameObjects.Length == 0)
+        if (enemyGameObjects.Length == 0 || playerTransform == null)
             return;
 
         Vector3 randomSpawnPosition = transform.position + Random.onUnitSphere * spawnRadius;
@@ -39,23 +39,22 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject selectedEnemy = enemyGameObjects[Random.Range(0, enemyGameObjects.Length)];
         GameObject newEnemy = Instantiate(selectedEnemy, randomSpawnPosition, Quaternion.identity);
+        newEnemy.transform.parent = transform; // Optional, for organization
 
-        // Assign the spawner as a parent (optional, for organization)
-        newEnemy.transform.parent = transform;
-
-        Monster monsterComponent = newEnemy.GetComponent<Monster>();
-        if (monsterComponent != null)
+        // Set the playerTransform reference on the spawned enemy
+        EnemyFollowAndAttack enemyScript = newEnemy.GetComponent<EnemyFollowAndAttack>();
+        if (enemyScript != null)
         {
-            monsterComponent.spawner = this;
+            enemyScript.playerTransform = playerTransform;
         }
 
         spawnedEnemiesCount++;
     }
 
-    // Public method to be called by an enemy when it is destroyed
     public void OnEnemyDestroyed()
     {
         if (spawnedEnemiesCount > 0)
             spawnedEnemiesCount--;
     }
 }
+
