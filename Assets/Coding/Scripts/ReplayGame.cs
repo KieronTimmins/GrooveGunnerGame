@@ -8,7 +8,7 @@ using TMPro;
 
 public class ReplayGame : MonoBehaviour
 {
-    public string SceneName;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -23,9 +23,17 @@ public class ReplayGame : MonoBehaviour
 
     }
 
-    public void GoToScene()
+    public void GoToSceneMain()
     {
-        SceneManager.LoadScene(SceneName);
+        SceneManager.LoadScene("GrooveGunner");
+    }
+
+
+
+
+    public void GoToSceneMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
 }
