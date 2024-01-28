@@ -1,16 +1,14 @@
-using UnityEngine;
-using TMPro; // Import TextMeshPro namespace
 using System.Collections;
+using UnityEngine;
 
 public class DashForward : MonoBehaviour
 {
     public float dashDistance = 5f;
     public float dashDuration = 0.5f;
-    public float dashCooldown = 5f;
+    public float dashCooldown = 5f; // New variable for cooldown duration
     public KeyCode dashKey = KeyCode.F;
     public AudioClip[] dashAudioClips;
     public AudioSource audioSource;
-    public TMP_Text cooldownText; // Use TMP_Text for UI text element
 
     private bool isDashing;
     private bool isCooldown;
@@ -43,18 +41,13 @@ public class DashForward : MonoBehaviour
             StartCooldown();
         }
 
-        // Update cooldown timer and UI text
+        // Update cooldown timer
         if (isCooldown)
         {
             cooldownTimer -= Time.deltaTime;
             if (cooldownTimer <= 0)
             {
                 isCooldown = false;
-                cooldownText.text = ""; // Clear UI text when cooldown ends
-            }
-            else
-            {
-                cooldownText.text = "Cooldown: " + Mathf.Round(cooldownTimer).ToString(); // Update UI text
             }
         }
     }
@@ -85,6 +78,11 @@ public class DashForward : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < dashDuration)
         {
+            if (CheckForWallCollision())
+            {
+                break;
+            }
+
             transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / dashDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -92,5 +90,20 @@ public class DashForward : MonoBehaviour
 
         transform.position = targetPosition;
         isDashing = false;
+    }
+
+    bool CheckForWallCollision()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 0.5f))
+        {
+            if (hit.collider.CompareTag("Wall"))
+            {
+                StartCooldown(); // Start cooldown if a wall is hit
+                return true;
+            }
+        }
+
+        return false;
     }
 }
